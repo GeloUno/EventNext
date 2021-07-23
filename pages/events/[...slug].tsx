@@ -1,9 +1,28 @@
 import styles from '../../styles/Shared.module.css'
-import { useRouter } from 'next/router';
-import { getFilteredEvents } from './../../dummy-data';
+import { getEventsFromServer, getFilteredEvents } from './../../dummy-data';
 import EventList from '../../components/events/event-list';
 import EventsSearch from './../../components/events/event-search';
+import { IEvent } from '../../dummy-data';
+import { GetStaticPaths, GetStaticProps } from 'next';
+import { ParsedUrlQuery } from 'querystring';
 
+
+interface IStaticProps {
+    data: IEvent[]
+}
+interface IStaticParams extends ParsedUrlQuery {
+    slug: Array<string>
+}
+
+interface IStaticPaths extends ParsedUrlQuery {
+    slug: string[]
+}
+
+interface IParamSlugPath {
+    params: {
+        slug: Array<string>
+    }
+}
 const messageComponent = (value: string): JSX.Element => (
     <>
         <EventsSearch />
@@ -13,36 +32,71 @@ const messageComponent = (value: string): JSX.Element => (
     </>
 )
 
-function FilterEventPages() {
-    const router = useRouter()
+function FilterEventPages({ data }: IStaticProps) {
 
-    if (router.query.slug?.length != 2) {
-        return messageComponent('Invalid filter data')
-    }
 
-    const year: number | undefined = +router.query.slug[0];
-    const month: number | undefined = +router.query.slug[1];
-
-    if (!year || !month || year < 2021 || year > 2022 || month < 1 || month > 12) {
-        return messageComponent('Invalid filter data')
-    }
-
-    const dataFilterEvents = getFilteredEvents({ year, month })
-
-    if (!dataFilterEvents) {
-        return messageComponent('Loading....')
-    }
-
-    if (dataFilterEvents && dataFilterEvents.length == 0) {
+    if (data && data.length == 0) {
         return messageComponent('no Events fount')
     }
 
     return (
         <>
             <EventsSearch />
-            <EventList items={dataFilterEvents} key={'1111'} />
+            <EventList items={data} key={'1111'} />
         </>
     );
 }
 
 export default FilterEventPages;
+
+
+export const getStaticPaths: GetStaticPaths<IStaticPaths> = async () => {
+
+    const data: IEvent[] = await getEventsFromServer()
+
+    const params: Array<IParamSlugPath> = []
+
+    data.map(el => {
+        const dateEventToArray = el.date.split('-')
+
+        params.push({ params: { slug: [dateEventToArray[0], dateEventToArray[1]] } })
+
+    })
+
+    return {
+        paths: params
+        ,
+        fallback: 'blocking',
+
+    }
+}
+
+
+
+
+export const getStaticProps: GetStaticProps<IStaticProps, IStaticParams> = async ({ params }) => {
+
+    const data: IEvent[] = []
+
+
+    if (!params?.slug[0] || !params?.slug[1] || params?.slug.length !== 2) {
+        return {
+            notFound: true
+        }
+
+    }
+    const month: number = +params.slug[1]
+    const year: number = +params.slug[0]
+
+    const dataHelper = await getFilteredEvents({ year, month })
+    dataHelper.map(el => {
+        data.push(el)
+    })
+
+    return {
+        props: {
+            data
+        },
+        revalidate: 1 * 60 * 60
+    }
+}
