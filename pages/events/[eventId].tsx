@@ -1,9 +1,10 @@
-import { getEventById, getEventsFromServer, IEvent } from '../../dummy-data';
+import { getEventById, getAllEventsFromServer, IEvent } from '../../dummy-data';
 import EventSummary from '../../components/eventDetail/event-summary';
 import EventLogistics from '../../components/eventDetail/event-logistics';
 import EventContent from '../../components/eventDetail/event-content';
 import { GetStaticPaths, GetStaticProps } from 'next';
 import { ParsedUrlQuery } from 'querystring'
+import { messageComponent } from './[...slug]';
 
 
 interface IStaticPath extends ParsedUrlQuery {
@@ -22,6 +23,19 @@ function EventDtailPages(
         title
     }: IEvent
 ) {
+    if (!date ||
+        !description ||
+        // !id||
+        !image ||
+        // isFeatured,
+        !location ||
+        !title) {
+        return (
+            messageComponent('no data')
+        )
+
+
+    }
 
     return (
         <>
@@ -56,7 +70,7 @@ export const getStaticProps: GetStaticProps<IEvent, IStaticPath> = async ({ para
 
     const data = await getEventById(params.eventId)
 
-    if (!data) {
+    if (!data || !data.location) {
         return {
             notFound: true
         }
@@ -64,7 +78,7 @@ export const getStaticProps: GetStaticProps<IEvent, IStaticPath> = async ({ para
 
     return {
         props: data,
-        revalidate: 10
+        revalidate: 30
     }
 }
 
@@ -86,13 +100,13 @@ const getPathsParamsFromData = (data: IEvent[]): Array<IParamPath> => {
 
 export const getStaticPaths: GetStaticPaths<IStaticPath> = async () => {
 
-    const dataServer = await getEventsFromServer()
+    const dataServer = await getAllEventsFromServer()
 
     const params: Array<IParamPath> = getPathsParamsFromData(dataServer)
 
     return {
         paths: params,
         fallback: 'blocking'
-
+        // fallback: true
     }
 }

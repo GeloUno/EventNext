@@ -1,5 +1,5 @@
 import styles from '../../styles/Shared.module.css'
-import { getEventsFromServer, getFilteredEvents } from './../../dummy-data';
+import { getAllEventsFromServer, getFilteredEvents } from './../../dummy-data';
 import EventList from '../../components/events/event-list';
 import EventsSearch from './../../components/events/event-search';
 import { IEvent } from '../../dummy-data';
@@ -23,7 +23,7 @@ interface IParamSlugPath {
         slug: Array<string>
     }
 }
-const messageComponent = (value: string): JSX.Element => (
+export const messageComponent = (value: string): JSX.Element => (
     <>
         <EventsSearch />
         <div className={styles.container}>
@@ -52,7 +52,7 @@ export default FilterEventPages;
 
 export const getStaticPaths: GetStaticPaths<IStaticPaths> = async () => {
 
-    const data: IEvent[] = await getEventsFromServer()
+    const data: IEvent[] = await getAllEventsFromServer()
 
     const params: Array<IParamSlugPath> = []
 

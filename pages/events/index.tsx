@@ -1,5 +1,4 @@
-import styles from '../../styles/Shared.module.css'
-import { getAllEvents, getEventsFromServer, IEvent } from '../../dummy-data';
+import { getAllEventsFromServer, IEvent } from '../../dummy-data';
 import EventList from './../../components/events/event-list';
 import EventsSearch from './../../components/events/event-search';
 import { GetStaticProps } from 'next';
@@ -19,11 +18,12 @@ export default AllEventsPages;
 
 export const getStaticProps: GetStaticProps = async () => {
 
-    const data = await getEventsFromServer()
+    const data = await getAllEventsFromServer()
 
     return {
         props: {
             items: data
-        }
+        },
+        revalidate: 60
     }
 }

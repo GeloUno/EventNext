@@ -53,7 +53,7 @@ const DUMMY_EVENTS: Array<IEvent> = [
     // },
 ];
 
-export async function getEventsFromServer() {
+export async function getAllEventsFromServer() {
     const dataServer = await fetch(URL_EVENTS)
     const data: Array<IEvent> = []
     const dataObject: EventsServerObject = await dataServer.json()
@@ -61,12 +61,7 @@ export async function getEventsFromServer() {
     for (const key in dataObject) {
         const dataHelper: IEvent = {
             id: key,
-            title: dataObject[key].title,
-            date: dataObject[key].date,
-            description: dataObject[key].description,
-            image: dataObject[key].image,
-            isFeatured: dataObject[key].isFeatured,
-            location: dataObject[key].location
+            ...dataObject[key]
         }
         data.push(dataHelper)
     }
@@ -81,7 +76,7 @@ export function getFeaturedEvents(data: Array<IEvent>) {
 
 
 export async function getAllEvents() {
-    const data = await getEventsFromServer()
+    const data = await getAllEventsFromServer()
 
     return data;
 }
@@ -91,7 +86,7 @@ export interface IDateFilter {
     month: number
 }
 export async function getFilteredEvents({ month, year }: IDateFilter) {
-    const data = await getEventsFromServer()
+    const data = await getAllEventsFromServer()
 
     let filteredEvents = data?.filter((event) => {
         const eventDate = new Date(event.date);
@@ -102,7 +97,7 @@ export async function getFilteredEvents({ month, year }: IDateFilter) {
 }
 
 export async function getEventById(id: string) {
-    const data = await getEventsFromServer()
+    const data = await getAllEventsFromServer()
 
     return data?.find((event) => event.id === id);
 }
