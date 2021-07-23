@@ -1,4 +1,4 @@
-import { IBooks } from '../../dummy-data';
+import { IEvent } from '../../dummy-data';
 import Image from 'next/image';
 import styles from './event-item.module.css'
 import Button from './../ui/button';
@@ -6,7 +6,7 @@ import DateIcon from '../icons/date-icon';
 import AddressIcon from '../icons/address-icon';
 import ArrowRightIcon from '../icons/arrow-right.icon';
 
-function EventItem({ item: { date, description, id, image, location, title, isFeatured } }: { item: IBooks }) {
+function EventItem({ item: { date, description, id, image, location, title, isFeatured } }: { item: IEvent }) {
     // const {
     //     date,
     //     description,

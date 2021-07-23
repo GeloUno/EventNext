@@ -1,7 +1,5 @@
 import Button from './../ui/button';
-import { getFilteredEvents } from './../../dummy-data';
 import styles from './event-search.module.css'
-import { IEvent } from '../../dummy-data';
 import { useRef } from 'react';
 import { useRouter } from 'next/router';
 

@@ -1,28 +1,20 @@
 import styles from '../../styles/Shared.module.css'
-import { getAllEventsFromServer, getFilteredEvents } from './../../dummy-data';
+import { getFilteredEvents } from './../../dummy-data';
 import EventList from '../../components/events/event-list';
 import EventsSearch from './../../components/events/event-search';
 import { IEvent } from '../../dummy-data';
-import { GetStaticPaths, GetStaticProps } from 'next';
+import { GetServerSideProps, } from 'next';
 import { ParsedUrlQuery } from 'querystring';
 
 
-interface IStaticProps {
+interface IServerProps {
     data: IEvent[]
 }
-interface IStaticParams extends ParsedUrlQuery {
+interface IServerParams extends ParsedUrlQuery {
     slug: Array<string>
 }
 
-interface IStaticPaths extends ParsedUrlQuery {
-    slug: string[]
-}
 
-interface IParamSlugPath {
-    params: {
-        slug: Array<string>
-    }
-}
 export const messageComponent = (value: string): JSX.Element => (
     <>
         <EventsSearch />
@@ -32,7 +24,7 @@ export const messageComponent = (value: string): JSX.Element => (
     </>
 )
 
-function FilterEventPages({ data }: IStaticProps) {
+function FilterEventPages({ data }: IServerProps) {
 
 
     if (data && data.length == 0) {
@@ -49,32 +41,7 @@ function FilterEventPages({ data }: IStaticProps) {
 
 export default FilterEventPages;
 
-
-export const getStaticPaths: GetStaticPaths<IStaticPaths> = async () => {
-
-    const data: IEvent[] = await getAllEventsFromServer()
-
-    const params: Array<IParamSlugPath> = []
-
-    data.map(el => {
-        const dateEventToArray = el.date.split('-')
-
-        params.push({ params: { slug: [dateEventToArray[0], dateEventToArray[1]] } })
-
-    })
-
-    return {
-        paths: params
-        ,
-        fallback: 'blocking',
-
-    }
-}
-
-
-
-
-export const getStaticProps: GetStaticProps<IStaticProps, IStaticParams> = async ({ params }) => {
+export const getServerSideProps: GetServerSideProps<IServerProps, IServerParams> = async ({ params }) => {
 
     const data: IEvent[] = []
 
@@ -85,8 +52,8 @@ export const getStaticProps: GetStaticProps<IStaticProps, IStaticParams> = async
         }
 
     }
-    const month: number = +params.slug[1]
-    const year: number = +params.slug[0]
+    const month: number = +params!.slug[1]
+    const year: number = +params!.slug[0]
 
     const dataHelper = await getFilteredEvents({ year, month })
     dataHelper.map(el => {
@@ -94,9 +61,6 @@ export const getStaticProps: GetStaticProps<IStaticProps, IStaticParams> = async
     })
 
     return {
-        props: {
-            data
-        },
-        revalidate: 1 * 60 * 60
+        props: { data }
     }
 }
