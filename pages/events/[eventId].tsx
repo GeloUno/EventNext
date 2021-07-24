@@ -5,6 +5,7 @@ import EventContent from '../../components/eventDetail/event-content';
 import { GetStaticPaths, GetStaticProps } from 'next';
 import { ParsedUrlQuery } from 'querystring'
 import { messageComponent } from './[...slug]';
+import Head from 'next/head';
 
 
 interface IStaticPath extends ParsedUrlQuery {
@@ -33,12 +34,17 @@ function EventDtailPages(
         return (
             messageComponent('no data')
         )
-
-
     }
 
     return (
         <>
+            <Head>
+                <title>{title}</title>
+                <meta
+                    name="description"
+                    content={`${description}`}
+                />
+            </Head>
             <EventSummary
                 title={title}
             />
