@@ -53,11 +53,8 @@ const DUMMY_EVENTS: Array<IEvent> = [
     // },
 ];
 
-export async function getAllEventsFromServer() {
-    const dataServer = await fetch(URL_EVENTS)
+export const getArrayFromObjectDataEvents = (dataObject: EventsServerObject) => {
     const data: Array<IEvent> = []
-    const dataObject: EventsServerObject = await dataServer.json()
-
     for (const key in dataObject) {
         const dataHelper: IEvent = {
             id: key,
@@ -68,6 +65,13 @@ export async function getAllEventsFromServer() {
     return data
 }
 
+export async function getAllEventsFromServer() {
+    const dataServer = await fetch(URL_EVENTS)
+    const dataObject: EventsServerObject = await dataServer.json()
+    const data = getArrayFromObjectDataEvents(dataObject)
+    return data
+}
+
 export function getFeaturedEvents(data: Array<IEvent>) {
     const dataFilter = data.filter((event) => event.isFeatured);
     return dataFilter
@@ -75,18 +79,17 @@ export function getFeaturedEvents(data: Array<IEvent>) {
 
 
 
-export async function getAllEvents() {
-    const data = await getAllEventsFromServer()
-
-    return data;
-}
+// export async function getAllEvents() {
+//     const data = await getAllEventsFromServer()
+//     return data;
+// }
 
 export interface IDateFilter {
     year: number,
     month: number
 }
-export async function getFilteredEvents({ month, year }: IDateFilter) {
-    const data = await getAllEventsFromServer()
+export function getFilteredEvents({ month, year }: IDateFilter, data: IEvent[]) {
+    // const data = await getAllEventsFromServer()
 
     let filteredEvents = data?.filter((event) => {
         const eventDate = new Date(event.date);
