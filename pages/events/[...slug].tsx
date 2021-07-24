@@ -39,8 +39,6 @@ function FilterEventPages({ dataEvents, errorServer }: IServerProps) {
 
     const { data, error } = useSWR(URL_EVENTS)
 
-    console.log("<- LOG -> file: [...slug].tsx -> line 40 -> FilterEventPages -> data", data)
-
     useEffect(() => {
         if (data && !data.error && router.query.slug?.length == 2) {
             const year: number = + router.query.slug[0]
