@@ -6,6 +6,7 @@ import { GetStaticPaths, GetStaticProps } from 'next';
 import { ParsedUrlQuery } from 'querystring'
 import { messageComponent } from './[...slug]';
 import Head from 'next/head';
+import Comments from '../../components/input/comments';
 
 
 interface IStaticPath extends ParsedUrlQuery {
@@ -17,7 +18,7 @@ function EventDtailPages(
     {
         date,
         description,
-        // id,
+        id,
         image,
         // isFeatured,
         location,
@@ -26,7 +27,7 @@ function EventDtailPages(
 ) {
     if (!date ||
         !description ||
-        // !id||
+        !id ||
         !image ||
         // isFeatured,
         !location ||
@@ -59,6 +60,7 @@ function EventDtailPages(
             <EventContent>
                 {description}
             </EventContent>
+            <Comments eventId={id} />
         </>
     );
 }
