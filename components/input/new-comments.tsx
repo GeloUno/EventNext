@@ -1,6 +1,6 @@
 import classes from './new-comments.module.css'
 import React, { useRef, useState } from 'react';
-import { IComment } from '../../model/IComment';
+import { IComment } from '../../model/comments/IComment';
 
 interface INewCommentProps {
     onAddComment(comment: IComment): void

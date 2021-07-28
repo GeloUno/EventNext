@@ -1,7 +1,7 @@
 import classes from './comments.module.css'
 import React, { useEffect, useState } from 'react';
 import NewComments from './new-comments';
-import { IComment } from "../../model/IComment";
+import { IComment } from "../../model/comments/IComment";
 import CommentList from './comment-list';
 
 interface ICommentsProps {

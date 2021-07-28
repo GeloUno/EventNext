@@ -1,5 +1,5 @@
 import { NextApiResponse, NextApiRequest } from 'next';
-import { IComment } from '../../model/IComment';
+import { IComment } from '../../model/comments/IComment';
 
 export function handlerCommentsGET(req: NextApiRequest, res: NextApiResponse, eventId: string) {
     const dummyList = [

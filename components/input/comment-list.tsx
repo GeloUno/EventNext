@@ -1,5 +1,5 @@
 import classes from './comment-list.module.css';
-import { IComment } from '../../model/IComment';
+import { IComment } from '../../model/comments/IComment';
 
 interface ICommentListProps {
     dataCommentsEvent: Array<IComment> | null
