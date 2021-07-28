@@ -1,5 +1,5 @@
 import classes from './comments.module.css'
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import NewComments from './new-comments';
 import { IComment } from "../../model/IComment";
 import CommentList from './comment-list';
@@ -11,6 +11,16 @@ interface ICommentsProps {
 function Comments({ eventId }: ICommentsProps) {
 
     const [isShowComment, setIsShowComment] = useState<boolean>(false)
+    const [commentsEvent, setCommentsEvent] = useState<Array<IComment> | null>(null)
+    useEffect(() => {
+        if (isShowComment) {
+            fetch(`/api/comments/${eventId}`)
+                .then(respons => respons.json())
+                .then(data => setCommentsEvent(data))
+        }
+        return () => {
+        }
+    }, [isShowComment])
 
     function toggleShowComment() {
         setIsShowComment(prev => !prev)
@@ -30,7 +40,7 @@ function Comments({ eventId }: ICommentsProps) {
         <section className={classes.comments}>
             <button onClick={toggleShowComment}>{isShowComment ? 'Hidden' : "Show"} Comments</button>
             {isShowComment && <NewComments onAddComment={addCommnet} />}
-            {isShowComment && <CommentList />}
+            {isShowComment && (commentsEvent != null) && <CommentList dataCommentsEvent={commentsEvent} />}
         </section>
     );
 }
