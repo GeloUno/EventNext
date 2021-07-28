@@ -1,21 +1,25 @@
 import classes from './comment-list.module.css';
+import { IComment } from '../../model/IComment';
 
-function CommentList() {
+interface ICommentListProps {
+    dataCommentsEvent: Array<IComment> | null
+}
+function CommentList({ dataCommentsEvent }: ICommentListProps) {
+
+
     return (
         <ul className={classes.comments}>
-            {/* Render list of comments - fetched from API */}
-            <li>
-                <p>My comment is amazing!</p>
-                <div>
-                    By <address>Tom</address>
-                </div>
-            </li>
-            <li>
-                <p>My comment is amazing!</p>
-                <div>
-                    By <address>Lee</address>
-                </div>
-            </li>
+
+            {dataCommentsEvent && (dataCommentsEvent.length > 0) && (dataCommentsEvent.map((event) => {
+                return (
+                    <li key={event.text}>
+                        <p>{event.text}</p>
+                        <div>
+                            By <address>{event.name}</address>
+                        </div>
+                    </li>
+                )
+            }))}
         </ul>
     );
 }
