@@ -4,10 +4,10 @@ import { handlerCommentsGET, handlerCommentsPOST } from './../../../controller/c
 
 function handler(req: NextApiRequest, res: NextApiResponse) {
     const method = req.method;
-    // const eventId = req.query;
+    const eventId: string = req.query?.eventId.toString();
 
     switch (method) {
-        case "GET": handlerCommentsGET(req, res);
+        case "GET": handlerCommentsGET(req, res, eventId);
             break;
         case "POST": handlerCommentsPOST(req, res);
             break;
