@@ -1,13 +1,12 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { handlerNewsLetterGET, handlerNewsLetterPOST } from "../../controller/newsLetter/newLetter";
+import { handlerNewsLetterGET, handlerNewsLetterPOST } from '../../controller/newsLetter/newLetter';
 
-function handler(req: NextApiRequest, res: NextApiResponse) {
-
+async function handler(req: NextApiRequest, res: NextApiResponse) {
 
     switch (req.method) {
         case 'GET': handlerNewsLetterGET(req, res)
             break;
-        case 'POST': handlerNewsLetterPOST(req, res)
+        case 'POST': await handlerNewsLetterPOST(req, res)
             break;
 
         default:

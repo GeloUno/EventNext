@@ -1,13 +1,15 @@
 import classes from './new-comments.module.css'
 import React, { useRef, useState } from 'react';
-import { IComment } from '../../model/comments/IComment';
+import { INewComment } from '../../model/comments/IComment';
 
 interface INewCommentProps {
-    onAddComment(comment: IComment): void
+    onAddComment(comment: INewComment): void,
+    eventId: string
 }
 
 function NewComments(props: INewCommentProps) {
 
+    const { eventId } = props
 
     const [isInValidComment, setIsInValidComment] = useState(false)
     const emailInputRef = useRef<HTMLInputElement>(null)
@@ -21,12 +23,10 @@ function NewComments(props: INewCommentProps) {
         const name = nameInputRef.current?.value
         const text = commentlInputRef.current?.value
         if (!email || !email.includes('@') || !name || name.trim() === '' || !text || text.trim() === '') {
-
-            console.log("<- LOG -> file: new-comments.tsx -> line 29 -> sendCommentHandler -> email || email.includes('@') || !name || name.trim() === '' || !comment || comment.trim() === ''", !email, !email!.includes('@'), !name, name!.trim() === '', !text, text!.trim() === '')
-            setIsInValidComment(true);
             return
         }
-        props.onAddComment({ email, name, text })
+
+        props.onAddComment({ email, name, text, eventId })
 
     }
 
