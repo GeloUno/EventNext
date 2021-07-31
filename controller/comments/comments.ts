@@ -40,6 +40,6 @@ export async function handlerCommentsPOST(req: NextApiRequest, res: NextApiRespo
         return res.status(201).json({ message: 'Create comment', comment: newComment })
 
     } catch (error) {
-        throw res.status(422).json({ message: error.message })
+        throw res.status(500).json({ message: error.message })
     }
 }
