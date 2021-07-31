@@ -5,7 +5,7 @@ import { IComment } from "../../model/comments/IComment";
 import CommentList from './comment-list';
 import NotificationContext from '../../store/notification-context';
 import { StatusNotificationEnum } from '../../model/Notification/StatusNotificationEnum';
-
+import BeatLoader from "react-spinners/BeatLoader";
 
 interface ICommentsProps {
     eventId: string
@@ -57,9 +57,10 @@ function Comments({ eventId }: ICommentsProps) {
                 if (response.ok) {
                     return response.json()
                 } else {
-                    throw response.json().then(data => data)
+                    return response.json().then(data => {
+                        throw { message: data.message || "Error save comment" }
+                    })
                 }
-
             })
             .then((data: { message: string, comment: IComment }) => {
 
@@ -92,6 +93,7 @@ function Comments({ eventId }: ICommentsProps) {
         <section className={classes.comments}>
             <button onClick={toggleShowComment}>{isShowComment ? 'Hidden' : "Show"} Comments</button>
             {isShowComment && <NewComments onAddComment={addCommnet} eventId={eventId} />}
+            {isShowComment && (!commentsEvent) && <BeatLoader color={'hsl(170, 97%, 38%)'} size={35} margin={25} />}
             {isShowComment && (commentsEvent != null) && <CommentList dataCommentsEvent={commentsEvent} />}
         </section>
     );
