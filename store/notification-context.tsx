@@ -21,6 +21,14 @@ export function NoificationContextProvider({ children }: INoificationContextProv
 
     const [activeNotification, setActiveNotification] = useState<INotification | null>(null)
 
+    function showNotification(notificationData: INotification) {
+        setActiveNotification(notificationData)
+    }
+
+    function hiddenNotification() {
+        setActiveNotification(null)
+    }
+
     const timer = setTimeout(() => {
         setActiveNotification(null)
     }, 10 * 1000);
@@ -34,12 +42,6 @@ export function NoificationContextProvider({ children }: INoificationContextProv
         }
     }, [activeNotification])
 
-    function showNotification(notificationData: INotification) {
-        setActiveNotification(notificationData)
-    }
-    function hiddenNotification() {
-        setActiveNotification(null)
-    }
     const context: IContextNotification = {
         notification: activeNotification, hiddenNotification,
         showNotification
