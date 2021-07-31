@@ -1,14 +1,20 @@
 
-import React, { useRef } from 'react';
+import React, { useRef, useContext } from 'react';
 import classes from './newsletter-registration.module.css'
+import NoificationContext from '../../store/notification-context';
+import { StatusNotificationEnum } from '../../model/Notification/StatusNotificationEnum';
 
 
 function NewsletterRegistration() {
+    const notificationCtx = useContext(NoificationContext)
 
     const emailInputRef = useRef<HTMLInputElement>(null)
 
     function registrationHandler(event: React.FormEvent<HTMLFormElement>) {
         event.preventDefault()
+
+        notificationCtx?.showNotification({ message: 'Register user to news letter', status: StatusNotificationEnum.PENDING, title: "Signing up..." })
+
         const emailInput = emailInputRef.current?.value;
         if (emailInput) {
 
@@ -20,14 +26,29 @@ function NewsletterRegistration() {
                 }
             }
             )
-                .then(response => response.json())
+                .then(response => {
+                    if (response.ok) {
+                        return response.json()
+                    } else {
+                        return response.json().then(data => {
+                            throw { user: data.user, message: data.message || "Something went wrong" }
+                        })
+                    }
+                })
                 .then(data => {
-                    console.log(data)
+                    notificationCtx?.showNotification({
+                        message: `Success register for news letter ${data?.user}`,
+                        status: StatusNotificationEnum.SUCCESS,
+                        title: "Success !"
+                    })
                     emailInputRef.current!.value = ""
                 }
-
-                )
-
+                ).catch(error => {
+                    notificationCtx?.showNotification({
+                        message: `Error to save email in news letter ${error.user}`, status: StatusNotificationEnum.ERROR,
+                        title: "News letter"
+                    })
+                })
 
         }
     }

@@ -24,11 +24,11 @@ export async function handlerNewsLetterPOST(req: NextApiRequest, res: NextApiRes
 
         responsMongoDB && clientMongoDB.close()
 
-        return res.status(201).json({ message: 'signed up' })
+        return res.status(201).json({ message: 'signed up', user: userEmail })
 
     } catch (error) {
 
-        return res.status(422).json({ message: `error: ${error.message}` })
+        return res.status(500).json({ message: `error: ${error.message}`, user: userEmail })
     }
 }
 

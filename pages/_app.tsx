@@ -2,11 +2,11 @@ import Head from 'next/head';
 import '../styles/globals.css'
 import type { AppProps } from 'next/app'
 import Layout from '../components/layout/layout'
-import { Fragment } from 'react';
+import { NoificationContextProvider } from './../store/notification-context';
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <Fragment>
+    <NoificationContextProvider>
       <Head>
         <meta
           name="viewport"
@@ -16,7 +16,7 @@ function MyApp({ Component, pageProps }: AppProps) {
       <Layout>
         <Component {...pageProps} />
       </Layout>
-    </Fragment>
+    </NoificationContextProvider>
   )
 }
 export default MyApp
