@@ -10,9 +10,9 @@ function CommentList({ dataCommentsEvent }: ICommentListProps) {
     return (
         <ul className={classes.comments}>
 
-            {dataCommentsEvent && (dataCommentsEvent.length > 0) && (dataCommentsEvent.map((event) => {
+            {dataCommentsEvent && (dataCommentsEvent.length > 0) && (dataCommentsEvent.map((event, index) => {
                 return (
-                    <li key={event.text}>
+                    <li key={`${event.text}${index}`}>
                         <p>{event.text}</p>
                         <div>
                             By <address>{event.name}</address>

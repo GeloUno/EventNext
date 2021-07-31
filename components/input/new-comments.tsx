@@ -1,6 +1,8 @@
 import classes from './new-comments.module.css'
-import React, { useRef, useState } from 'react';
+import React, { useContext, useRef, useState } from 'react';
 import { INewComment } from '../../model/comments/IComment';
+import { StatusNotificationEnum } from '../../model/Notification/StatusNotificationEnum';
+import NotificationContext from '../../store/notification-context';
 
 interface INewCommentProps {
     onAddComment(comment: INewComment): void,
@@ -10,7 +12,7 @@ interface INewCommentProps {
 function NewComments(props: INewCommentProps) {
 
     const { eventId } = props
-
+    const notificationCtx = useContext(NotificationContext)
     const [isInValidComment, setIsInValidComment] = useState(false)
     const emailInputRef = useRef<HTMLInputElement>(null)
     const nameInputRef = useRef<HTMLInputElement>(null)
@@ -22,7 +24,14 @@ function NewComments(props: INewCommentProps) {
         const email = emailInputRef.current?.value
         const name = nameInputRef.current?.value
         const text = commentlInputRef.current?.value
+
+        // dummy vaildation
         if (!email || !email.includes('@') || !name || name.trim() === '' || !text || text.trim() === '') {
+            notificationCtx?.showNotification({
+                message: 'Invalid email adress',
+                status: StatusNotificationEnum.ERROR,
+                title: "Error"
+            })
             return
         }
 

@@ -14,7 +14,7 @@ interface INoificationContextProviderProps {
     children?: React.ReactNode | React.ReactNode[]
 }
 
-const NoificationContext = createContext<IContextNotification | null>(null)
+const NotificationContext = createContext<IContextNotification | null>(null)
 
 
 export function NoificationContextProvider({ children }: INoificationContextProviderProps) {
@@ -47,10 +47,10 @@ export function NoificationContextProvider({ children }: INoificationContextProv
         showNotification
     }
 
-    return <NoificationContext.Provider value={context}>
+    return <NotificationContext.Provider value={context}>
         {children}
-    </NoificationContext.Provider>
+    </NotificationContext.Provider>
 }
 
 
-export default NoificationContext;
+export default NotificationContext;

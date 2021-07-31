@@ -1,12 +1,12 @@
 
 import React, { useRef, useContext } from 'react';
 import classes from './newsletter-registration.module.css'
-import NoificationContext from '../../store/notification-context';
+import NotificationContext from '../../store/notification-context';
 import { StatusNotificationEnum } from '../../model/Notification/StatusNotificationEnum';
 
 
 function NewsletterRegistration() {
-    const notificationCtx = useContext(NoificationContext)
+    const notificationCtx = useContext(NotificationContext)
 
     const emailInputRef = useRef<HTMLInputElement>(null)
 
