@@ -14,7 +14,7 @@ export async function handlerNewsLetterPOST(req: NextApiRequest, res: NextApiRes
 
     // dummy validation
     if (!userEmail || !userEmail.includes('@')) {
-        return res.status(422).json({ message: "invalid emaiil address" })
+        return res.status(422).json({ message: "invalid email address" })
     }
     // every day check access ip mongoDB (whitelist) if you have dynamic ip
     try {
