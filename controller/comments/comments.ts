@@ -7,7 +7,7 @@ export async function handlerCommentsGET(req: NextApiRequest, res: NextApiRespon
 
     const { clientMongoDB, colection } = await connectClientToMongoDB(CollectionEnum.EVENTSCOMMENTS)
     const dataCommentsEvents: Array<IComment> = await colection.find({ eventId }).sort({ _id: -1 }).toArray()
-
+    clientMongoDB.close()
     return res.status(200).json([...dataCommentsEvents])
 }
 
@@ -40,6 +40,6 @@ export async function handlerCommentsPOST(req: NextApiRequest, res: NextApiRespo
         return res.status(201).json({ message: 'Create comment', comment: newComment })
 
     } catch (error) {
-        throw res.status(500).json({ message: error.message })
+        return res.status(500).json({ message: error.message })
     }
 }
