@@ -28,7 +28,7 @@ function NewComments(props: INewCommentProps) {
         // dummy vaildation
         if (!email || !email.includes('@') || !name || name.trim() === '' || !text || text.trim() === '') {
             notificationCtx?.showNotification({
-                message: 'Invalid email adress',
+                message: 'Invalid comment data',
                 status: StatusNotificationEnum.ERROR,
                 title: "Error"
             })
